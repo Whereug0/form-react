@@ -1,0 +1,26 @@
+input {
+    width: 336px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 3px;
+    border: 1px solid rgba(28, 55, 90, 0.16);
+    padding: 17px 15px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    &:focus {
+      border: 2px solid #1676F3 !important;
+      outline: none;
+    }
+}
+  
+  
+  
+label {
+    color: rgba(27, 43, 65, 0.72);
+    font-size: 12px;
+    font-weight: 500;
+}
+  
+
