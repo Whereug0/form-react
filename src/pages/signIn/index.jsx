@@ -6,15 +6,26 @@ import Input from "../../components/input";
 import Button from "../../components/button";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-
+import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
 function SignUp() {
+
+
+  const scheme = yup.object().shape({
+    userFullName: yup.string().min(3, "В поле должно быть минимум 3 символа").required("Full Name is required").transform(value => value === '' ? undefined : value),
+    userEmail: yup.string().email("Invalid email format").min(5, "В поле должно быть минимум 5 символов").matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "неправильно").required("Mail is required").transform(value => value === '' ? undefined : value),
+    userPassword: yup.string().required("Password is required").min(8, "В поле должно быть минимум 8 символов"),
+    userConfirmPassword: yup.string().required("Password confirmation is required").oneOf([yup.ref('userPassword'), null], 'Passwords must match')
+  })
+  
   const {
-    register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isValid },
   } = useForm({
+    resolver: yupResolver(scheme),
+    mode: "onBlur",
     defaultValues: {
       userFullName: "",
       userEmail: "",
@@ -53,7 +64,6 @@ function SignUp() {
         <Controller
             name="userFullName"
             control={control}
-            rules={{ minLength: 3 }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -63,20 +73,17 @@ function SignUp() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register('userFullName', {
-                    required: "Это поле обязательно!"
-                  })}
+               
                 />
               );
             }}
           />
            <div className={styles.error}>
-              {errors?.userFullName && <p className={styles.erorText}>{errors?.userFullName?.message || "Error!"}</p>}
+              {errors?.userFullName && <p className={styles.erorText}>{errors?.userFullName?.message}</p>}
             </div>
           <Controller
             name="userEmail"
             control={control}
-            rules={{ minLength: 5 }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -86,21 +93,19 @@ function SignUp() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register('userEmail', {
-                    required: "Это поле обязательно!"
-                  })}
+               
                 />
               );
             }}
           />
           <div className={styles.error}>
-              {errors?.userEmail && <p className={styles.erorText}>{errors?.userEmail?.message || "Error!"}</p>}
+              {errors?.userEmail && <p className={styles.erorText}>{errors?.userEmail?.message}</p>}
           </div>
           
           <Controller
             name="userPassword"
             control={control}
-            rules={{ minLength: 8 }}
+            rules={{ minLength: 8, required:"Это поле обязательно" }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -110,21 +115,19 @@ function SignUp() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register('userPassword', {
-                    required: "Это поле обязательно!"
-                  })}
+                
                 />
 
               );
             }}
           />
           <div className={styles.error}>
-              {errors?.userPassword && <p className={styles.erorText}>{errors?.userPassword?.message || "Error!"}</p>}
+              {errors?.userPassword && <p className={styles.erorText}>{errors?.userPassword?.message}</p>}
           </div>
            <Controller
             name="userConfirmPassword"
             control={control}
-            rules={{ minLength: 8 }}
+            rules={{ minLength: 8, required:"Это поле обязательно" }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -134,15 +137,13 @@ function SignUp() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register('userConfirmPassword', {
-                    required: "Это поле обязательно!"
-                  })}
+                
                 />
               );
             }}
           />
           <div className={styles.error}>
-              {errors?.userConfirmPassword && <p className={styles.erorText}>{errors?.userConfirmPassword?.message || "Error!"}</p>}
+              {errors?.userConfirmPassword && <p className={styles.erorText}>{errors?.userConfirmPassword?.message}</p>}
           </div>
           <div className={styles.rememberForgot}>
             <label>
@@ -158,7 +159,7 @@ function SignUp() {
             
             </label>
 
-            <Button value="Sign Up" disabled={!isDirty || !isValid}/>
+            <Button value="Sign Up" disabled={!isValid}/>
           </div>
         </form>
       </div>

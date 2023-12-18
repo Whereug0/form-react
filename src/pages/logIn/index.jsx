@@ -6,15 +6,23 @@ import Input from "../../components/input";
 import Button from "../../components/button";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
+import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
 
 function LogIn() {
+  const scheme = yup.object().shape({
+    userEmail: yup.string().email("Invalid email format").min(5, "В поле должно быть минимум 5 символов").matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).required("Mail is required").transform(value => value === '' ? undefined : value),
+    userPassword: yup.string().required("Password is required").min(8, "В поле должно быть минимум 8 символов")
+  })
+
+
   const {
-    register,
     handleSubmit,
     control,
     reset,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid},
   } = useForm({
+    resolver: yupResolver(scheme),
     mode: "onBlur",
     defaultValues: {
       userEmail: "",
@@ -27,7 +35,6 @@ function LogIn() {
     reset();
   };
 
-  console.log(errors, 'errors')
 
   return (
     <div className={styles.cardLognIn}>
@@ -54,9 +61,7 @@ function LogIn() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="userEmail"
-          
             control={control}
-            rules={{ minLength: 5 }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -73,15 +78,13 @@ function LogIn() {
           <div className={styles.error}>
             {errors?.userEmail && (
               <p className={styles.erorText}>
-                {errors?.userEmail?.message || "Error!"}
+                {errors?.userEmail?.message}
               </p>
             )}
           </div>
           <Controller
-            
             name="userPassword"
             control={control}
-            rules={{ minLength: 8 }}
             render={({ field, fieldState }) => {
               return (
                 <Input
@@ -98,7 +101,7 @@ function LogIn() {
           <div className={styles.error}>
             {errors?.userPassword && (
               <p className={styles.erorText}>
-                {errors?.userPassword?.message || "Error!"}
+                {errors?.userPassword?.message}
               </p>
             )}
           </div>
