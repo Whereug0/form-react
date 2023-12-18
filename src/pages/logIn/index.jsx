@@ -27,6 +27,8 @@ function LogIn() {
     reset();
   };
 
+  console.log(errors, 'errors')
+
   return (
     <div className={styles.cardLognIn}>
       <div className={styles.box}>
@@ -64,9 +66,6 @@ function LogIn() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register("userEmail", {
-                    required: "Это поле обязательно!",
-                  })}
                 />
               );
             }}
@@ -92,9 +91,6 @@ function LogIn() {
                   onChangeInput={field.onChange}
                   onBlur={field.onBlur}
                   hasError={fieldState.error}
-                  {...register("userPassword", {
-                    required: "Это поле обязательно!",
-                  })}
                 />
               );
             }}
@@ -118,14 +114,14 @@ function LogIn() {
               <a href="#">Forgot Password?</a>
             </label>
 
-            <Button value="Log In" disabled={!isDirty || !isValid} />
+            <Button value="Log In" disabled={!isValid} />
           </div>
         </form>
       </div>
 
       <div className={styles.noAccount}>
         <p>Don’t have an account?</p>
-        <Link to="/sign-in"> Sign In</Link>
+        <Link to="/sign-up"> Sign Up</Link>
       </div>
     </div>
   );

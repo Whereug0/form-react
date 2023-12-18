@@ -7,7 +7,7 @@ import Button from "../../components/button";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
-function SignIn() {
+function SignUp() {
   const {
     register,
     handleSubmit,
@@ -158,17 +158,17 @@ function SignIn() {
             
             </label>
 
-            <Button value="Sign In" disabled={!isDirty || !isValid}/>
+            <Button value="Sign Up" disabled={!isDirty || !isValid}/>
           </div>
         </form>
       </div>
 
       <div className={styles.noAccount}>
         <p>Already have an account?</p>
-        <Link to="/">Log In</Link>
+        <Link to="/log-in">Log In</Link>
       </div>
     </div>
   );
 }
 
-export default SignIn;
+export default SignUp;
